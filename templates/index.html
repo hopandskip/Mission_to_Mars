@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mission to Mars </title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="jumbotron text-center">
+      <h1>Mission to Mars</h1>
+      <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data!</a></p>
+    </div>
+
+    <!-- Display the latest news -->
+    <div class="row" id="mars-news">
+      <div class="col-md-12">
+        <h2 class="heading"><b>Latest Mars News</b></h2>
+        <h4><b>{{mars_info.title}}</b></h4>
+        <p>{{mars_info.content}}</p>
+      </div>
+    </div>
+  <div>
+
+    <!-- Display the featured image, weather, and mars facts-->
+   <div class = "container">
+    <div class="row">
+        <div class="col-md-9">
+            <h2 class="heading"><b>Featured Mars Image</b></h2>
+            <img src = {{mars_info.featured_image}} alt="Image" height="100%" width="100%" class="float-left">
+        </div>
+        <div class="col-md-3">
+            <h4>Current Weather on Mars</h4>
+            <p>{{ mars_info.weather_info }}</p>
+            <br><br>
+            <h4>Mars Facts</h4>
+            <div>{{mars_info.mars_facts|safe}}</div>
+        </div>
+    </div>
+  </div>
+    <!-- Display the hemisphere images-->
+  <div class = "container"></div>
+    <div class="row">
+        <!--Summary Box-->
+        <div class="col-sm-12">
+                <h2 style="text-align: center"><b>Mars Hemisphere Images</b></h2>
+                <hr>
+                {% for image in mars_info.hemisphere_images %}
+                <div class = "col-sm-6">
+                  <img src = {{image.img_url}} alt="Image" height="100%" width="100%" >
+                  <h4><b>{{image.title}}</b> </h4>
+                </div>
+                {% endfor %}
+        </div>
+      </div>
+  </div>
+    <br>
+
+
+  </div>
+
+  </div>
+        <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>
+
