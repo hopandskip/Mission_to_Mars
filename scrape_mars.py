@@ -13,10 +13,11 @@ def init_browser():
 
 mars_info={}
 
-#Grab the news from Nasa
-def nasa_news_scrape():
+def scrape():
     #initialize browser
     browser = init_browser()
+
+    # Scrape the News from Nasa
     # Visit Nasa news page through splinter module
     url = 'https://mars.nasa.gov/news'
     browser.visit(url)  
@@ -26,96 +27,62 @@ def nasa_news_scrape():
     # Retrieve the title and summary paragraph for the latest article (it comes up first)
     news_title = soup.find(class_='content_title').text
     news_p = soup.find(class_ = 'article_teaser_body').text
-
+    #Get the title and content
     mars_info["title"]=news_title
     mars_info["content"]=news_p
 
-    return mars_info
-
-# Grab the featured image from JPL
-def featured_image_scrape():
-    #initialize browser
-    browser = init_browser()
+    # Scrape the featured image from JPL
+    # Vist the JPL page 
     image_url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
     browser.visit(image_url)
-
     #Use beautiful soup to look at the html page
     html_image = browser.html
     soup = bs(html_image, 'html.parser')
-
     #Get the url of the image
     scraped_image_url = soup.find('article')['style']
     clean_image_url = scraped_image_url.replace("background-image: url('", "").replace("');","")
     featured_image_url = "https://www.jpl.nasa.gov/" + clean_image_url
-
+    #Get the featured image
     mars_info['featured_image']=featured_image_url
 
-    return mars_info
-
-# Get the latest weather updates of Mars from Mars Weather on Twitter
-def weather_updates_scrape():
-    #initialize browser   
-    browser = init_browser()
-
+    # Get the latest weather updates of Mars from Mars Weather on Twitter
     # Vist the Mars Weather twitter page and grab the latest weather
     mars_weather_twitter_url = 'https://twitter.com/marswxreport?lang=en'
     browser.visit(mars_weather_twitter_url) 
-
     #Use beautiful soup to look at the twitter html page
     mars_weather_twitter_html = browser.html
     soup = bs(mars_weather_twitter_html, 'html.parser')
-
     # Get the tweet data
     mars_weather = soup.find(class_="TweetTextSize TweetTextSize--normal js-tweet-text tweet-text").text
-
+    #Get the weather info
     mars_info['weather_info']=mars_weather
 
-    return mars_info
-
-# Grab facts about Mars from SpaceFacts
-def mars_facts_scrape():
-    #initialize browser
-    browser = init_browser()
-
+    #  Grab facts about Mars from SpaceFacts
     # Vist the Mars Space Facts page and grab the facts about Mars
     mars_facts_url = 'https://space-facts.com/mars/'
     tables = pd.read_html(mars_facts_url , encoding= "utf-8") 
-
     # Put the facts into a pandas table and rename the columns
     facts_df = tables[0]
     facts_df.columns = ['Description', 'Value']
-
     facts_df.set_index('Description', inplace=True)
-
     # Import the dataframe to an html
     mars_facts_html_table = facts_df.to_html()     
-
     # Save dataframe as an html file
     facts_df.to_html('mars_facts_table.html')  
-
+    # Get the tweet data
     mars_info['mars_facts']=mars_facts_html_table
-    
-    return mars_info
 
-# Mars Hemisphere Images
-def mars_hemisphere_images_scrape():
-    #initialize browser
-    browser = init_browser()
-
+    # Get Mars Hemisphere Images
     # Vist the USGS Astrogeology page and grab images of Mars
     mars_images_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     browser.visit(mars_images_url)
-
     #Use beautiful soup to look at the html page
     mars_images_url_html = browser.html
     soup = bs(mars_images_url_html, 'html.parser')
-
     # return the links from the html page
     image_descriptions = soup.find_all('div',class_='description')
-
     hemisphere_image_urls=[]
     hemi_main_url = 'https://astrogeology.usgs.gov'
-
     # loop through each of the images and get the full size image
     for i in image_descriptions:
         # grab the title
@@ -133,6 +100,8 @@ def mars_hemisphere_images_scrape():
         # Append the title and url links to hemisphere_image_urls as a dictionary
         hemisphere_image_urls.append({'title':title, 'img_url': full_size_images_url})
 
+    # Get the hemisphere image urls
     mars_info['hemisphere_images']=hemisphere_image_urls
 
+    # Return results of scrape
     return mars_info
